@@ -8,6 +8,7 @@ import 'package:task_manager_getx/ui/screen/set_password_screen.dart';
 import 'package:task_manager_getx/ui/screen/sign_in_screen.dart';
 import 'package:task_manager_getx/ui/screen/sign_up_screen.dart';
 import 'package:task_manager_getx/ui/screen/splash_screen.dart';
+import 'package:task_manager_getx/ui/screen/task_add_screen.dart';
 import 'package:task_manager_getx/ui/utils/app_colors.dart';
 
 class MyApp extends StatelessWidget {
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: SetPasswordScreen.name, page: () => SetPasswordScreen()),
         // Home Screen
         GetPage(name: DashBoardScreen.name, page: () => DashBoardScreen()),
+        GetPage(name: TaskAddScreen.routeName, page: () => TaskAddScreen()),
 
       ],
     );

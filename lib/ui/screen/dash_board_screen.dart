@@ -22,7 +22,7 @@ class DashBoardScreen extends StatefulWidget {
 class _DashBoardScreenState extends State<DashBoardScreen> {
   UserProfileModel? _userProfile;
   final List<Widget> _screens = [
-    NewTaskScreen(),
+    NewTaskListScreen(),
     ProgressScreen(),
     CompletedScreen(),
     CancelledScreen(),

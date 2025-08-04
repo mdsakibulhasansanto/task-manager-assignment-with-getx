@@ -10,7 +10,7 @@ class AuthController {
   static const String _accessTokenKey = 'access-token';
   static const String _userDataKey = 'user-data';
 
-  // Save f user model & token to SharedPreferences
+  // Save user model & token to SharedPreferences
   static Future<void> saveUserData(String token, UserModel model) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 

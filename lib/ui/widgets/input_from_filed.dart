@@ -25,18 +25,15 @@ class InputFromFiled extends StatelessWidget {
       controller: controller,
       keyboardType: inputType,
       cursorColor: AppColors.themeColor,
+
       decoration: InputDecoration(
         hintText: hint,
         filled: true,
         fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       ),
       validator: (value) {
         if (value == null || value.trim().isEmpty) {
-          return 'Required';
+          return 'Please enter ${hint.toLowerCase()}';
         }
         return null;
       },

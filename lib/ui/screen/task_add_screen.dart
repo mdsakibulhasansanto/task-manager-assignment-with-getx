@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_manager_getx/ui/widgets/custom_app_bar.dart';
 import 'package:task_manager_getx/ui/widgets/input_from_filed.dart';
+import 'package:task_manager_getx/ui/widgets/screen_bg.dart';
 
+import '../../data/models/user_profile_model.dart';
+import '../../data/services/network_caller.dart';
+import '../../data/urls/user_auth.dart';
+import '../controllers/auth_controller/auth_controllers.dart';
 import '../controllers/task_controller/task_add_controller.dart';
 import '../utils/app_colors.dart';
 
-
 class TaskAddScreen extends StatefulWidget {
   const TaskAddScreen({super.key});
+
   static const String routeName = '/task_add_screen';
 
   @override
@@ -15,155 +21,132 @@ class TaskAddScreen extends StatefulWidget {
 }
 
 class _TaskAddScreenState extends State<TaskAddScreen> {
+  UserProfileModel? _userProfile;
+
   final TextEditingController taskTitleController = TextEditingController();
   final TextEditingController taskDescriptionController = TextEditingController();
   final TaskAddController taskAddController = Get.find<TaskAddController>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  bool _inProgress = false;
+
+  @override
+  void initState() {
+    super.initState();
+    profileDataGet();
+  }
+
   @override
   Widget build(BuildContext context) {
+    String firstName = _userProfile?.data?.first.firstName ?? '';
+    String lastName = _userProfile?.data?.first.lastName ?? '';
+    String fullName = '$firstName $lastName';
+    String email = _userProfile?.data?.first.email ?? '';
+    String id = _userProfile?.data?.first.id ?? '';
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          color: AppColors.bgColor,
-          child: Column(
-            children: [
+      appBar: CustomAppBar(email: email, fullName: fullName, id: id),
+      resizeToAvoidBottomInset: true,
+      body: ScreenBackground(
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 34),
+                  Text(
+                    'Add New Task',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  InputFromFiled(
+                    controller: taskTitleController,
+                    hint: 'Task Title',
 
-              // Title Section
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        // Get.back();
+                  ),
+                  const SizedBox(height: 16),
+                  buildInputDescriptionField(
+                    controller: taskDescriptionController,
+                    hint: 'Task Description',
+                  ),
+                  const SizedBox(height: 34),
+                  // Sign Up Button
+                  Visibility(
+                    visible: !_inProgress,
+                    replacement: Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: AppColors.themeColor,
+                      ),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+
+                        }
                       },
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.white,
-                        foregroundColor: AppColors.themeColor,
-                        child: Icon(Icons.arrow_back_ios_new, size: 18),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.themeColor,
+                        minimumSize: const Size(double.infinity, 50),
                       ),
-                    ),
-                    const SizedBox(width: 0),
-                    const Expanded(
-                      child: Text(
-                        'Add Task',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 32),
-                  ],
-                ),
-              ),
-
-              // Task Form Section
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: _formKey,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 20),
-                            const Text(
-                              'Task title',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            InputFromFiled(
-                              controller: taskTitleController,
-                              hint: 'title',
-                            ),
-
-                            const SizedBox(height: 10),
-                            const Text(
-                              'Task description',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            buildInputDescriptionField(
-                              controller: taskDescriptionController,
-                              hint: 'Include logo, navigation, CTA button...',
-                            ),
-
-                            const SizedBox(height: 20),
-
-                            // Submit Button or Loader
-                            Obx(() => taskAddController.inProgress.value
-                                ? const Center(
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.green,
-                              ),
-                            )
-                                : ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  taskAddController.addTask(
-                                    taskTitleController.text.trim(),
-                                    taskDescriptionController.text.trim(),
-                                  );
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.themeColor,
-                              ),
-                              child: const Text(
-                                'Save Task',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            )),
-                          ],
-                        ),
+                      child: Icon(
+                        Icons.arrow_circle_left_outlined,
+                        size: 24,
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
+
+  Future<void> profileDataGet() async {
+    print("Using token: ${AuthController.accessToken}");
+
+    NetworkResponse response = await NetworkCaller.getRequest(
+      url: Urls.profileDetailsUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        'token': AuthController.accessToken!,
+      },
+    );
+
+    if (response.isSuccess) {
+      setState(() {
+        _userProfile = UserProfileModel.fromJson(response.responseData!);
+      });
+    } else {
+      print("Failed to fetch profile data");
+      print("Status: ${response.statusCode}");
+      print("Response: ${response.responseData}");
+    }
+  }
 }
 
-// Reusable description input field
 Widget buildInputDescriptionField({
   required TextEditingController controller,
   required String hint,
 }) {
   return SizedBox(
-    height: 200,
+    height: 250,
     child: TextFormField(
       controller: controller,
-      maxLines: 5,
+      maxLines: 100,
       decoration: InputDecoration(
         hintText: hint,
-        border: OutlineInputBorder(),
         filled: true,
         fillColor: Colors.white,
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 1.0),
-        ),
+
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {

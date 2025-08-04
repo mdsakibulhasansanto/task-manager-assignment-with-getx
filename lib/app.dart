@@ -32,10 +32,10 @@ class MyApp extends StatelessWidget {
           filled: true,
           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           hintStyle: TextStyle(color: Colors.grey),
-          border: OutlineInputBorder(borderSide: BorderSide.none),
-          enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-          focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-          errorBorder: OutlineInputBorder(borderSide: BorderSide.none),
+          border: OutlineInputBorder(borderSide: BorderSide.none,borderRadius: BorderRadius.circular(10)),
+          enabledBorder: OutlineInputBorder(borderSide: BorderSide.none,borderRadius: BorderRadius.circular(10)),
+          focusedBorder: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(10)),
+          errorBorder: OutlineInputBorder(borderSide: BorderSide.none,borderRadius: BorderRadius.circular(10)),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -71,6 +71,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: SetPasswordScreen.name, page: () => SetPasswordScreen()),
         // Home Screen
         GetPage(name: DashBoardScreen.name, page: () => DashBoardScreen()),
+        // Task Add Screen
         GetPage(name: TaskAddScreen.routeName, page: () => TaskAddScreen()),
 
       ],

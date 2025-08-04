@@ -25,17 +25,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Text(
             'Hello ${fullName ?? 'User'}',
             style: const TextStyle(
-              fontSize: 15,
-              color: Colors.black,
+              fontSize: 18,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 0),
-          const Text(
-            'Welcome to task manager',
+           Text(
+            email!,
             style: TextStyle(
               fontSize: 10,
-              color: Colors.black,
+              color: Colors.white,
               fontWeight: FontWeight.normal,
             ),
           ),
@@ -81,5 +81,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(60);
 }
